@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { Task } from "../../interfaces";
-import { useAppSelector } from "../../store/hooks";
 import Modal from "./Modal";
 
 const InputCheckbox: React.FC<{
@@ -32,8 +31,6 @@ const ModalCreateTask: React.FC<{
   nameForm: string;
   onConfirm: (task: Task) => void;
 }> = ({ onClose, task, nameForm, onConfirm }) => {
-  const directories = useAppSelector((state) => state.tasks.directories);
-
   const today: Date = new Date();
   let day: number = today.getDate();
   let month: number = today.getMonth() + 1;
@@ -83,13 +80,6 @@ const ModalCreateTask: React.FC<{
     return false;
   });
 
-  const [selectedDirectory, setSelectedDirectory] = useState<string>(() => {
-    if (task) {
-      return task.dir;
-    }
-    return directories[0];
-  });
-
   const addNewTaskHandler = (event: React.FormEvent): void => {
     event.preventDefault();
 
@@ -99,7 +89,6 @@ const ModalCreateTask: React.FC<{
     if (isTitleValid.current && isDateValid.current) {
       const newTask: Task = {
         title: title,
-        dir: selectedDirectory,
         description: description,
         date: date,
         completed: isCompleted,
@@ -148,24 +137,7 @@ const ModalCreateTask: React.FC<{
             onChange={({ target }) => setDescription(target.value)}
           ></textarea>
         </label>
-        <label>
-          Select a directory
-          <select
-            className="block w-full"
-            value={selectedDirectory}
-            onChange={({ target }) => setSelectedDirectory(target.value)}
-          >
-            {directories.map((dir: string) => (
-              <option
-                key={dir}
-                value={dir}
-                className="bg-slate-100 dark:bg-slate-800"
-              >
-                {dir}
-              </option>
-            ))}
-          </select>
-        </label>
+        
         <InputCheckbox
           isChecked={isImportant}
           setChecked={setIsImportant}

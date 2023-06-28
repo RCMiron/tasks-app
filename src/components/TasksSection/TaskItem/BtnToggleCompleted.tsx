@@ -7,8 +7,7 @@ import { ReactComponent as Check } from "../../../assets/check.svg";
 const BtnToggleCompleted: React.FC<{
   taskCompleted: boolean;
   taskId: string;
-  isListInView1: boolean;
-}> = ({ taskCompleted, taskId, isListInView1 }) => {
+}> = ({ taskCompleted, taskId }) => {
   const dispatch = useAppDispatch();
 
   const toggleTaskCompleted = (id: string) => {
@@ -22,7 +21,7 @@ const BtnToggleCompleted: React.FC<{
         taskCompleted
           ? "bg-emerald-200 text-emerald-800 "
           : "bg-amber-200 text-amber-800 "
-      } ${isListInView1 ? "mr-4" : "mr-4 order-0"} rounded-full font-medium`}
+      } mr-4 rounded-full font-medium`}
       onClick={() => toggleTaskCompleted(taskId)}
     >
       <span className="block py-1 px-3 absolute invisible sm:static sm:visible">
