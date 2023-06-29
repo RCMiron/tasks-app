@@ -19,3 +19,7 @@ const modalSlice = createSlice({
 
 export const modalActions = modalSlice.actions;
 export default modalSlice.reducer;
+
+export const modalSelectors = {
+modalCreateTaskOpen: (state: any) => state.modal.modalCreateTaskOpen,
+}
