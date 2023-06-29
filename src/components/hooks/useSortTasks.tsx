@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Task } from "../../interfaces";
 
-const useSortTasks = (tasks: Task[]) => {
+export const useSortTasks = (tasks: Task[]) => {
   const [sortedBy, setSortedBy] = useState<string>("");
 
   const [sortedTasks, setSortedTasks] = useState<Task[]>(tasks);

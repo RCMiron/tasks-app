@@ -55,3 +55,7 @@ const tasksSlice = createSlice({
 
 export const tasksActions = tasksSlice.actions;
 export default tasksSlice.reducer;
+
+export const tasksSelectors = {
+  tasks: (state: { tasks: { tasks: Task[] } }) => state.tasks.tasks,
+}

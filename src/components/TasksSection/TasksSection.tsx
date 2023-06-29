@@ -2,12 +2,13 @@ import React from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useAppDispatch } from "../../store/hooks";
 import { modalActions } from "../../store/Modal.store";
-import useSortTasks from "../hooks/useSortTasks";
+import {useSortTasks} from "../hooks/useSortTasks";
 import ButtonsSort from "../TasksSection/ButtonsSort";
 import TaskItem from "../TasksSection/TaskItem/TaskItem";
+import { tasksSelectors } from "../../store/Tasks.store";
 
 const TasksSection: React.FC = () => {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const tasks = useAppSelector(tasksSelectors.tasks);
 
   const dispatch = useAppDispatch();
 
@@ -16,7 +17,6 @@ const TasksSection: React.FC = () => {
   const openModalHandler = () => {
     dispatch(modalActions.openModalCreateTask());
   };
-
 
   return (
     <main className=" pt-5 pb-8 sm:pb-16 px-3 md:px-8 md:w-full xl:w-8/12 m-auto min-h-screen">
