@@ -14,8 +14,8 @@ const ModalConfirm: React.FC<{
     <Modal onClose={onClose} title="Are you sure?">
       <p className="text-slate-500">{text}</p>
       <div className="mt-7 ml-auto">
-        <button onClick={onClose}>Cancel</button>
-        <button onClick={confirmAndCloseModal} className="btn ml-6">
+        <button data-test-id='modal-close' onClick={onClose}>Cancel</button>
+        <button data-test-id='modal-confirm' onClick={confirmAndCloseModal} className="btn ml-6">
           Confirm
         </button>
       </div>
