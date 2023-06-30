@@ -1,134 +1,87 @@
-import React, { useRef, useState } from "react";
+// generate a react component to pass the tests in ModalTask.test.tsx
+import React from "react";
 import { Task } from "../../interfaces";
-import Modal from "./Modal";
 import InputCheckbox from "./InputCheckbox";
-import { getTodayDate } from "./getTodayDate";
 
-const ModalCreateTask: React.FC<{
+
+
+import Modal from "./Modal";
+
+interface Props {
   onClose: () => void;
-  task?: Task;
-  nameForm: string;
   onConfirm: (task: Task) => void;
-}> = ({ onClose, task, nameForm, onConfirm }) => {
+  nameForm: string;
+  task?: Task;
+}
 
-  const { todayDate, maxDate } = getTodayDate();
+const ModalTask = ({ onClose, onConfirm, nameForm, task }: Props) => {
+  const [title, setTitle] = React.useState(task?.title || "");
+  const [description, setDescription] = React.useState(task?.description || "");
+  const [completed, setCompleted] = React.useState(task?.completed || false);
+  const [important, setImportant] = React.useState(task?.important || false);
+  const [date, setDate] = React.useState(task?.date || new Date().toString());
+  
+  
 
-
-  const [description, setDescription] = useState<string>(() => {
-    if (task) {
-      return task.description;
-    }
-    return "";
-  });
-  const [title, setTitle] = useState<string>(() => {
-    if (task) {
-      return task.title;
-    }
-    return "";
-  });
-  const [date, setDate] = useState<string>(() => {
-    if (task) {
-      return task.date;
-    }
-    return todayDate;
-  });
-  const isTitleValid = useRef<Boolean>(false);
-  const isDateValid = useRef<Boolean>(false);
-
-  const [isImportant, setIsImportant] = useState<boolean>(() => {
-    if (task) {
-      return task.important;
-    }
-    return false;
-  });
-
-  const [isCompleted, setIsCompleted] = useState<boolean>(() => {
-    if (task) {
-      return task.completed;
-    }
-    return false;
-  });
-
-  const addNewTaskHandler = (event: React.FormEvent): void => {
-    event.preventDefault();
-
-    isTitleValid.current = title.trim().length > 0;
-    isDateValid.current = date.trim().length > 0;
-
-    if (isTitleValid.current && isDateValid.current) {
-      const newTask: Task = {
-        title: title,
-        description: description,
-        date: date,
-        completed: isCompleted,
-        important: isImportant,
-        id: task?.id ? task.id : Date.now().toString(),
-      };
-      onConfirm(newTask);
-      onClose();
-    }
+  const confirm = () => {
+    if (!title) return;
+    onConfirm({ title, description, completed, important, date, id: task?.id || "" });
+    onClose();
   };
+
+  const cancel = () => {
+    onClose();
+  };
+
   return (
-    <Modal onClose={onClose} title={nameForm}>
-      <form
-        className="flex flex-col stylesInputsField"
-        onSubmit={addNewTaskHandler}
-      >
-        <label>
-          Title
+    <Modal onClose={cancel} title={nameForm}>
+      <div className="modal__header">
+        <h2 >{nameForm}</h2>
+        <button onClick={cancel}>
+        </button>
+      </div>
+      <div className="modal__body">
+        <form onSubmit={confirm}>
+          <label htmlFor="title">Title</label>
           <input
             type="text"
-            placeholder="e.g, study for the test"
-            required
+            id="title"
             value={title}
-            onChange={({ target }) => setTitle(target.value)}
-            className="w-full"
+            onChange={(e) => setTitle(e.target.value)}
             data-test-id="title"
           />
-        </label>
-        <label>
-          Date
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            data-test-id="description"
+          />
+          <label htmlFor="date">Date</label>
           <input
             type="date"
-            className="w-full"
+            id="date"
             value={date}
-            required
-            onChange={({ target }) => setDate(target.value)}
-            min={todayDate}
-            max={maxDate}
-            data-test-id="date"
+            onChange={(e) => setDate(e.target.value)}
+            data-test-id='date'
           />
-        </label>
-        <label>
-          Description (optional)
-          <textarea
-            placeholder="e.g, study for the test"
-            className="w-full"
-            value={description}
-            onChange={({ target }) => setDescription(target.value)}
-            data-test-id="description"
-
-          ></textarea>
-        </label>
-        
-        <InputCheckbox
-          isChecked={isImportant}
-          setChecked={setIsImportant}
-          label="Mark as important"
-          data-test-id="important"
-        />
-        <InputCheckbox
-          isChecked={isCompleted}
-          setChecked={setIsCompleted}
-          label="Mark as completed"
-          data-test-id="completed"
-        />
-        <button type="submit" className="btn mt-5">
-          {nameForm}
-        </button>
-      </form>
+          <InputCheckbox
+            data-test-id="important"
+            label="Important"
+            isChecked={important}
+            setChecked={() => setImportant(prev => !prev)}
+          />
+          <InputCheckbox
+            data-test-id="completed"
+            label="Completed"
+            isChecked={completed}
+            setChecked={() => setCompleted(prev => !prev)}
+          />
+          <button type="submit" >SUBMIT</button>
+        </form>
+      </div>
     </Modal>
   );
-};
+}
 
-export default ModalCreateTask;
+export default ModalTask;

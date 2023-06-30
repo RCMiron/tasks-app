@@ -1,28 +1,20 @@
+// generate a react component to pass the tests in ActionsTaskItem.test.tsx
 import React from "react";
 import { Task } from "../../../interfaces";
 import BtnEditTask from "./BtnEditTask";
-import BtnMarkAsImportant from "./BtnMarkAsImportant";
 import BtnDeleteTask from "./BtnDeleteTask";
 import BtnToggleCompleted from "./BtnToggleCompleted";
+import BtnMarkAsImportant from "./BtnMarkAsImportant";
 
-const ActionsTaskItem: React.FC<{ task: Task; }> = ({
-  task,
-}) => {
-  return (
-    <>
-      <div
-        className={`flex border-dashed border-slate-200 dark:border-slate-700/[.3] items-center`}
-      >
-        <BtnToggleCompleted
-          taskCompleted={task.completed}
-          taskId={task.id}
-        />
-        <BtnMarkAsImportant taskId={task.id} taskImportant={task.important} />
-        <BtnDeleteTask taskId={task.id} />
-        <BtnEditTask task={task} />
-      </div>
-    </>
-  );
-};
+const ActionsTaskItem = ({ task }: { task: Task }) => {
+    return (
+        <div>
+            <BtnEditTask task={task} />
+            <BtnDeleteTask taskId={task.id} />
+            <BtnToggleCompleted taskCompleted={task.completed} taskId={task.id}/>
+            <BtnMarkAsImportant taskImportant={task.important} taskId={task.id}/>
+        </div>
+    );
+}
 
 export default ActionsTaskItem;

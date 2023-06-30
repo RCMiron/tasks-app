@@ -1,37 +1,31 @@
+// generate a react component to pass the tests in App.test.tsx
+
 import React from "react";
-import TasksSection from "./components/TasksSection/TasksSection";
 import ModalCreateTask from "./components/Utilities/ModalTask";
-import { Task } from "./interfaces";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
+import TasksSection from "./components/TasksSection/TasksSection";
+import { useAppSelector, useAppDispatch } from "./store/hooks";
 import { modalActions, modalSelectors } from "./store/Modal.store";
+import { Task } from "./interfaces";
 import { tasksActions } from "./store/Tasks.store";
 
-
-const App: React.FC = () => {
+const App = () => {
   const modalCreateTaskOpen = useAppSelector(modalSelectors.modalCreateTaskOpen);
-
   const dispatch = useAppDispatch();
 
   const closeModalCreateTask = () => {
     dispatch(modalActions.closeModalCreateTask());
   };
 
-  const createNewTaskHandler = (task: Task) => {
+  const createTask = (task: Task) => {
     dispatch(tasksActions.addNewTask(task));
   };
 
   return (
-    <div className="bg-slate-200 min-h-screen text-slate-600 dark:bg-slate-900 dark:text-slate-400 xl:text-base sm:text-sm text-xs">
-      {modalCreateTaskOpen && (
-        <ModalCreateTask
-          onClose={closeModalCreateTask}
-          nameForm="Add a task"
-          onConfirm={createNewTaskHandler}
-        />
-      )}
+    <>
       <TasksSection />
-    </div>
+      {modalCreateTaskOpen && <ModalCreateTask onClose={closeModalCreateTask} onConfirm={createTask} nameForm="Add task"/>}
+    </>
   );
-};  
+}
 
 export default App;
